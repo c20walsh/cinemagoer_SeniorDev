@@ -1,34 +1,60 @@
-import requests
-from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
+import os
+import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+options = Options()
+options.add_argument("--headless") # remove for demo
+
+driver_path = os.path.join(os.getcwd(), 'geckodriver.exe')
+service = Service(driver_path)
+driver = webdriver.Firefox(service=service, options=options)
 
 url = "https://www.imdb.com/name/nm0005458/"
-headers = {"User-Agent": "Mozilla/5.0"}
-response = requests.get(url, headers=headers)
-soup = BeautifulSoup(response.text, "html.parser")
+driver.get(url)
 
-elements = soup.find_all(True)
+button = WebDriverWait(driver, 5).until(
+    EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'All credits')]"))
+)
+driver.execute_script("arguments[0].scrollIntoView(true);", button)
+time.sleep(1)
+button.click()
+
+WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.CLASS_NAME, "ipc-metadata-list-summary-item__t"))
+)
+
+time.sleep(5)
 movies = []
-
-valid_roles = {"Actor", "Producer", "Director", "Writer", "Editor", "Stunts"}
+valid_roles = {"Actor", "Producer", "Director", "Writer", "Editor", "Stunts", "Thanks", "Self", "Archive Footage"}
+elements = driver.find_elements(By.XPATH, "//*")
 
 for elem in elements:
-    if elem.name == "a" and "ipc-metadata-list-summary-item__t" in elem.get("class", []):
-        movies.append(elem.text.strip())
-    elif "ipc-title__text" in elem.get("class", []):
-        role_text = elem.text.strip()
-        if role_text in valid_roles:
+    class_name = elem.get_attribute("class")
+    if elem.tag_name == "a" and class_name and "ipc-metadata-list-summary-item__t" in class_name:
+        title = elem.text.strip()
+        if title:
+            movies.append(title)
+    elif class_name and "ipc-title__text" in class_name:
+        role = elem.text.strip()
+        if role in valid_roles:
             movies.append("")
-            movies.append(role_text.upper())
-    elif elem.name == "li" and "credits-total" in elem.get("class", []):
-        parent_ul = elem.find_parent("ul")
-        if parent_ul and "ipc-inline-list--show-dividers" in parent_ul.get("class", []):
-            list_items = parent_ul.find_all("li")
-            for i, li in enumerate(list_items):
+            movies.append(role.upper())
+    elif class_name and "credits-total" in class_name:
+        parent = elem.find_element(By.XPATH, "..")
+        if parent and "ipc-inline-list--show-dividers" in parent.get_attribute("class"):
+            items = parent.find_elements(By.TAG_NAME, "li")
+            for i, li in enumerate(items):
                 if li == elem and i > 0:
-                    label = list_items[i - 1].text.strip()
+                    label = items[i - 1].text.strip()
                     movies.append("")
                     movies.append(label.upper())
                     break
 
-for item in movies:
-    print(item)
+
+for movie in movies:
+    print(movie)
