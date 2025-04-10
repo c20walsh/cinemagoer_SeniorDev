@@ -30,6 +30,9 @@ WebDriverWait(driver, 10).until(
 
 time.sleep(5)
 movies = []
+filmography = {}
+current_role = None
+
 valid_roles = {"Actor", "Producer", "Director", "Writer", "Editor", "Stunts", "Thanks", "Self", "Archive Footage"}
 elements = driver.find_elements(By.XPATH, "//*")
 
@@ -37,13 +40,15 @@ for elem in elements:
     class_name = elem.get_attribute("class")
     if elem.tag_name == "a" and class_name and "ipc-metadata-list-summary-item__t" in class_name:
         title = elem.text.strip()
-        if title:
+        if title and current_role:
             movies.append(title)
+            filmography.setdefault(current_role, []).append(elem.text.strip())
     elif class_name and "ipc-title__text" in class_name:
         role = elem.text.strip()
         if role in valid_roles:
             movies.append("")
             movies.append(role.upper())
+            current_role = role.lower()
     elif class_name and "credits-total" in class_name:
         parent = elem.find_element(By.XPATH, "..")
         if parent and "ipc-inline-list--show-dividers" in parent.get_attribute("class"):
