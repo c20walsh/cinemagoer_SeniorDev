@@ -450,9 +450,20 @@ class IMDbBase:
             res = self._search_movie(title, results)
         else:
             res = self._search_episode(title, results)
-        return [Movie.Movie(movieID=self._get_real_movieID(mi),
-                data=md, modFunct=self._defModFunct,
-                accessSystem=self.accessSystem) for mi, md in res if mi and md][:results]
+        movie_list = []
+        for movie_id, metadata in res:
+            if movie_id and metadata:
+                new_kind = self.get_movie(movie_id).get('kind')
+                if new_kind:
+                    metadata['kind'] = new_kind
+                movie_obj = Movie.Movie(
+                    movieID=self._get_real_movieID(movie_id),
+                    data=metadata,
+                    modFunct=self._defModFunct,
+                    accessSystem=self.accessSystem
+                )
+                movie_list.append(movie_obj)
+        return movie_list[:results]
 
     def _get_movie_list(self, list_, results):
         """Return a list of tuples (movieID, {movieData})"""
