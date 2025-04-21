@@ -25,12 +25,12 @@ def retrieve_unicode_cached(self, url, size=-1):
     key = "_".join(url.split("/")[3:])
     cache_file = os.path.join(cache_dir, key)
     if os.path.exists(cache_file):
-        with open(cache_file, 'r') as f:
+        with open(cache_file, 'r',encoding='utf-8') as f:
             content = f.read()
     else:
         time.sleep(DELAY)
         content = retrieve_unicode_orig(self, url, size=size)
-        with open(cache_file, 'w') as f:
+        with open(cache_file, 'w',encoding="utf-8") as f:
             f.write(content)
     return content
 
