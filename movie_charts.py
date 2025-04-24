@@ -8,7 +8,7 @@ import os
 import re
 
 
-def get_full_list(movies_list_type):
+def get_full_list(chart):
     # Setup options and driver
     options = Options()
     options.add_argument("--headless")
@@ -17,9 +17,15 @@ def get_full_list(movies_list_type):
     service = Service(driver_path)
     driver = webdriver.Firefox(service=service, options=options)
 
+    # get current valid chart. I may add some more in the future
+    valid_charts = {"top", "bottom", "toptv", "moviemeter"}
+    if chart not in valid_charts:
+        return "Invalid movie list"
+
     # Load IMDb page
-    url = f"https://www.imdb.com/chart/{movies_list_type}/"
+    url = f"https://www.imdb.com/chart/{chart}/"
     driver.get(url)
+
 
     try:
         # Wait for the table of movies to load
