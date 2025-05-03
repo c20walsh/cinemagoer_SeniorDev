@@ -36,21 +36,24 @@ def get_full_list(chart):
         # Find all metadata items
         movie_elements = driver.find_elements(By.CLASS_NAME, "ipc-metadata-list-summary-item")
 
-        top_movies = []
-        for item in movie_elements:
+        movies = []
+        for rank, item in enumerate(movie_elements):
             title_element = item.find_element(By.CLASS_NAME, "ipc-title__text")
             raw_title = title_element.text.strip()
 
             # Remove leading rank number like "1. " using regex
             title = re.sub(r"^\d+\.\s*", "", raw_title)
 
-            if title:
-                top_movies.append(title)
+            movie_data = {
+                    "rank": rank + 1,
+                    "title": title,
+                }
+            movies.append(movie_data)
 
     finally:
         driver.quit()
 
-    return top_movies
+    return movies
 
 
 def get_top250_movies():

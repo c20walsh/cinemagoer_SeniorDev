@@ -4,14 +4,9 @@ from imdb import Cinemagoer
 
 ia = Cinemagoer()
 
+
 @pytest.fixture
 def bottom100_movies():
-    return movie_charts.get_bottom100_movies()
-def popular100_movies():
-    return movie_charts.get_bottom100_movies()
-def top250_movies():
-    return movie_charts.get_bottom100_movies()
-def top250_tvs():
     return movie_charts.get_bottom100_movies()
 
 
@@ -28,15 +23,16 @@ def test_bottom_chart_entries_should_have_movie_id(bottom100_movies):
     for movie in bottom100_movies:
         search_results = ia.search_movie(movie["title"])  # Get search results
 
-        assert search_results, f"IMDb search failed for {movie['title']}"
+        assert search_results
 
         # Ensure first result has a valid IMDb ID
         imdb_id = search_results[0].movieID if search_results else None
-        assert imdb_id and imdb_id.isdigit(), f"Invalid IMDb ID for {movie['title']}: {imdb_id}"
+        assert imdb_id and imdb_id.isdigit()
 
 
 def test_bottom_chart_entries_should_have_title(bottom100_movies):
-    assert all("title" in movie and isinstance(movie["title"], str) and movie["title"].strip() for movie in bottom100_movies)
+    assert all(
+        "title" in movie and isinstance(movie["title"], str) and movie["title"].strip() for movie in bottom100_movies)
 
 
 def test_bottom_chart_entries_should_be_movies(bottom100_movies):
@@ -59,14 +55,13 @@ def test_bottom_chart_entries_should_have_year(bottom100_movies):
 
     for movie in edge_cases:
         search_results = ia.search_movie(movie["title"])  # Get search results
-        assert search_results, f"IMDb search failed for {movie['title']}"
+        assert search_results
 
         # Retrieve full movie details using IMDb ID
         movie_data = ia.get_movie(search_results[0].movieID)
 
         # Ensure year exists and is an integer
-        assert "year" in movie_data and isinstance(movie_data["year"], int), \
-            f"Invalid year for {movie['title']}: {movie_data.get('year')}"
+        assert "year" in movie_data and isinstance(movie_data["year"], int)
 
 
 def test_bottom_chart_entries_should_have_low_ratings(bottom100_movies):
@@ -74,14 +69,13 @@ def test_bottom_chart_entries_should_have_low_ratings(bottom100_movies):
 
     for movie in edge_cases:
         search_results = ia.search_movie(movie["title"])  # Get search results
-        assert search_results, f"IMDb search failed for {movie['title']}"
+        assert search_results
 
         # Retrieve full movie details using IMDb ID
         movie_data = ia.get_movie(search_results[0].movieID)
 
         # Ensure rating exists and is a valid float below 5.0
-        assert "rating" in movie_data and isinstance(movie_data["rating"], float) and movie_data["rating"] < 5.0, \
-            f"Invalid rating for {movie['title']}: {movie_data.get('rating')}"
+        assert "rating" in movie_data and isinstance(movie_data["rating"], float) and movie_data["rating"] < 5.0
 
 
 def test_bottom_chart_entries_should_have_minimal_number_of_votes(bottom100_movies):
@@ -95,5 +89,4 @@ def test_bottom_chart_entries_should_have_minimal_number_of_votes(bottom100_movi
         movie_data = ia.get_movie(search_results[0].movieID)
 
         # Ensure vote count exists and is at least 1,500
-        assert "votes" in movie_data and isinstance(movie_data["votes"], int) and movie_data["votes"] >= 1500, \
-            f"Invalid vote count for {movie['title']}: {movie_data.get('votes')}"
+        assert "votes" in movie_data and isinstance(movie_data["votes"], int) and movie_data["votes"] >= 1500
