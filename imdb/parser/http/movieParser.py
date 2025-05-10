@@ -1992,16 +1992,16 @@ class DOMHTMLTechParser(DOMParserBase):
         Rule(
             key='tech',
             extractor=Rules(
-                foreach='//table//tr/td[@class="label"]',
+                foreach='//ul[@class="ipc-metadata-list ipc-metadata-list--dividers-between sc-5e41bcfa-0 gCiMzf meta-data-list-full ipc-metadata-list--base"]/li',
                 rules=[
                     Rule(
                         key=Path(
-                            './text()',
-                            transform=lambda x: x.lower().strip()),
+                            './@id',
+                        ),
                         extractor=Path(
-                            '..//td[2]//text()',
-                            transform=lambda x: [t.strip()
-                                                 for t in x.split(':::') if t.strip()]
+                            foreach='.//ul[@class="ipc-inline-list ipc-inline-list--show-dividers ipc-inline-list--inline ipc-metadata-list-item__list-content base"]/li',
+                            path= './/text()',
+
                         )
                     )
                 ]
