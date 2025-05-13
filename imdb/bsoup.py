@@ -23,7 +23,7 @@ button = WebDriverWait(driver, 5).until(
     EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'All credits')]"))
 )
 driver.execute_script("arguments[0].scrollIntoView(true);", button)
-time.sleep(1)
+time.sleep(3)
 button.click()
 
 WebDriverWait(driver, 10).until(
