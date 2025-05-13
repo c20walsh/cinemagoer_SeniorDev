@@ -1,3 +1,15 @@
+Cinemagoer_SeniorDev Fork Readme
+-------------
+This project is a fork of Cinemagoer, which is a python package that retrieves information and data from IMDb. This fork fixes a few issues the package had when retrieving information from IMDb.
+
+How To Run the Project Fork
+-------------
+**Requirements**: Have Python 3 and Mozilla Firefox installed on your system. Install the requirements.txt by typing “pip install -r https://raw.githubusercontent.com/c20walsh/cinemagoer_seniordev/master/requirements.txt“ into the terminal. Also download Geckodriver.exe from https://github.com/mozilla/geckodriver and place it in the same directory as the python file you are running.
+
+**To Run**: On the terminal, run “pip install git+https://github.com/c20walsh/cinemagoer_seniordev“.  You can import the package by doing: from imdb import Cinemagoer. To view filmography, you need to do: from imdb.bsoup import filmography.
+
+Original ReadMe
+-------------
 |pypi| |pyversions| |license|
 
 .. |pypi| image:: https://img.shields.io/pypi/v/cinemagoer.svg?style=flat-square
