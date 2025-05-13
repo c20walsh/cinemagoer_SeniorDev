@@ -87,7 +87,7 @@ def get_movie_awards(imdb_id):
 
     return awards
 
-# Example: Gladiator
-awards = get_movie_awards("tt0133093")  # OR "tt0133093" for The Matrix
-for award in awards:
-    print(award)
+# # Example: Gladiator
+# awards = get_movie_awards("tt0133093")  # OR "tt0133093" for The Matrix
+# for award in awards:
+#     print(award)
