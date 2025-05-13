@@ -7,8 +7,9 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-imdb_id = input("Please type in valid IMDb id (example: nm0000120)")
-url = "https://www.imdb.com/name/" + imdb_id + "/"
+# imdb_id = input("Please type in valid IMDb id (example: nm0000120)")
+# url = "https://www.imdb.com/name/" + imdb_id + "/"
+url = "https://www.imdb.com/name/nm0005458/"
 
 options = Options()
 options.add_argument("--headless") # remove for demo

@@ -1,6 +1,6 @@
 import unittest
 from imdb import Cinemagoer
-from cinemagoer_SeniorDev.bsoup import filmography
+from imdb.bsoup import filmography
 # Assuming this is your custom function or data
 
 class TestJasonStathamData(unittest.TestCase):
