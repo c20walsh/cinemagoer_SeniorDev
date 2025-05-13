@@ -11,7 +11,7 @@ imdb_id = input("Please type in valid IMDb id (example: nm0000120)")
 url = "https://www.imdb.com/name/" + imdb_id + "/"
 
 options = Options()
-# options.add_argument("--headless") # remove for demo
+options.add_argument("--headless") # remove for demo
 
 driver_path = os.path.join(os.getcwd(), 'geckodriver.exe')
 service = Service(driver_path)
